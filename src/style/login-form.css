@@ -1,0 +1,30 @@
+.login-title {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 27px;
+    font-weight: bold;
+    color: #3f3f3f;
+}
+
+.content-login-form {
+    height: 100%;
+    width: 100%;
+    padding: 50px;
+    box-sizing: border-box;
+}
+
+.login-form-items {
+    height: 100%;
+}
+
+.forgot-password {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 12px;
+    color: #585858;
+    text-align: right;
+    text-decoration: none;
+}
+
+input:-webkit-autofill {
+    -webkit-text-fill-color: inherit !important;
+    transition: background-color 5000s ease-in-out 0s;
+}
