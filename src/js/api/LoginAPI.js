@@ -1,9 +1,8 @@
-import { doLogin, error } from '../actions/loginActionCreator'
+import { login, error } from '../actions/loginActionCreator'
 
-class LoginAPI {
-    
-    static doLogin(user, password) {
-        return dispatch => {
+let LoginAPI = {
+   doLogin(user, password) {
+        return (dispatch) => {
             fetch('http://192.168.0.17:8090/login', {
                 method: 'POST',
                 headers: {
@@ -18,19 +17,23 @@ class LoginAPI {
                 return response.json();
             })
             .then(json => {
-                if (json.status) {
-                    dispatch(error(json));
-                } else {
-                    dispatch(doLogin(json));
-                    dispatch(error(''));
+                if(json.status && json.status !== 200) { 
+                    throw Error(json.cause); 
                 }
+                setToken(json.token);
+                dispatch(login(json));
+                dispatch(error(''));
                 return json;
             })
-            .catch(error => {
-                console.log(error.message);
+            .catch(e => {
+                dispatch(error(e.message));
             });
         }
     }
+}
+
+function setToken(token) {
+    localStorage.setItem('token', token);
 }
 
 export default LoginAPI;

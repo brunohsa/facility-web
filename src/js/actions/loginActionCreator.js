@@ -1,6 +1,8 @@
-export function doLogin(login) {
+import { LOGIN } from './ActionTypes';
+
+export function login(login) {
     return {
-        type: 'LOGIN', 
+        type: LOGIN, 
         login
     }
 }
@@ -8,6 +10,6 @@ export function doLogin(login) {
 export function error(error) {
     return {
         type: 'ERROR', 
-        error: { error }
+        error
     }
 }

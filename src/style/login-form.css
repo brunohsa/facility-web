@@ -5,13 +5,6 @@
     color: #3f3f3f;
 }
 
-.content-login-form {
-    height: 100%;
-    width: 100%;
-    padding: 50px;
-    box-sizing: border-box;
-}
-
 .login-form-items {
     height: 100%;
 }
@@ -27,4 +20,24 @@
 input:-webkit-autofill {
     -webkit-text-fill-color: inherit !important;
     transition: background-color 5000s ease-in-out 0s;
+}
+
+img.iconError {
+    margin-left: 10px;
+}
+
+.error {
+    height: 35px;
+    width: 100%;
+    background-color: #ff4c4c;
+    display: flex;
+    align-items: center;
+    border-radius: 2px;
+}
+
+.errorText {
+    box-sizing: border-box;
+    color: white;
+    font-family: Arial, Helvetica, sans-serif;
+    margin-left: 10px;
 }

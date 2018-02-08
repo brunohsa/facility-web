@@ -1,14 +1,8 @@
-export function login(state = null, action) {
-    if(action.type === 'LOGIN') {
-        console.log(action.login);
-        return action.login;
-    }
-    return state;
-}
+import { combineReducers } from 'redux';
+import { loginReducers } from './loginReducer';
+import { errorReducers } from './errorReducer';
 
-export function error(state = null, action) {
-    if(action.type === 'ERROR') {
-        return action.error;
-    }
-    return state;
-}
+export default combineReducers({
+    login: loginReducers,
+    error: errorReducers
+});

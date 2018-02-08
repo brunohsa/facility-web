@@ -35,4 +35,6 @@
     display: inline-block;
     position: absolute;
     z-index: 1;
+    padding: 50px;
+    box-sizing: border-box;
 }

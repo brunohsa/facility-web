@@ -1,8 +1,11 @@
 import React, {Component} from 'react';
 import { connect } from 'react-redux'
+import { withRouter } from 'react-router-dom'
 import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import PropTypes from 'prop-types';
+import Error from './Error';
 import '../../style/login-form.css';
 
 const USER_FIELD = 'user';
@@ -28,7 +31,7 @@ class LoginForm extends Component {
     listenerSubmitLogin = (actionLogin) => {
         let txtPassword = document.getElementById('txtPassword');
         txtPassword.addEventListener('keypress', function(e) {
-            if(e.key === 'Enter'){
+            if(e.key === 'Enter') {
                 actionLogin();
             }
         });
@@ -38,10 +41,8 @@ class LoginForm extends Component {
         let state = this.state;
         let errors = state.errors;
         let eventName = event ? 
-                            event.target ? event.target.name 
-                            : event 
+                            event.target ? event.target.name : event 
                         : '';
-        
         let userValue = eventName === USER_FIELD ? value : state.user;
         let passwordValue = eventName === PASSWORD_FIELD ? value : state.password;
         
@@ -52,19 +53,19 @@ class LoginForm extends Component {
         this.setState({
             user: userValue,
             password: passwordValue,
-            errors: newErrors
+            errors: newErrors,
+            logged: this.props.isLogged
         });
     }
 
     submitLogin = () => {
-        let isValid = this.validateLoginFields();
-        if(isValid) {
-            let state = this.state;
-            this.props.doLogin(state.user, state.password);
+        if(!this.validLoginFields()) {
+            return;
         }
+        this.props.doLogin(this.state.user, this.state.password);
     }
 
-    validateLoginFields = () => {
+    validLoginFields = () => {
         let userError = !this.state.user ? 'Campo Obrigatório' : '';
         let passwordError = !this.state.password ? 'Campo Obrigatório' : '';
         
@@ -81,19 +82,22 @@ class LoginForm extends Component {
         }
     }
 
+    redirect(path) {
+        this.props.history.push(path);
+    }
+
     render() {
+        if(this.props.token) {
+            this.redirect('/home');
+        }
+
         const props = this.props;
-        const state = this.state;
-        const errors = state.errors;
+        const errors = this.state.errors;
         return (
             <MuiThemeProvider>
-                <div className = "content-login-form">
+                <div>
                     {
-                        props.error ?
-                            <span id="error"> 
-                                { props.error.cause } 
-                            </span> 
-                        : <span></span>
+                        props.error ? <Error error={ props.error } /> : <div/>
                     }
                     <h1 className="login-title"> Login </h1>
                     <div className="login-form-items">
@@ -136,11 +140,16 @@ class LoginForm extends Component {
     }
 }
 
-const mapStateToProps = state => {
+LoginForm.propTypes = {
+    error: PropTypes.string,
+    token: PropTypes.string
+}
+
+const mapStateToProps = (state) => {
     return {
-      error: state ? state.error : null,
-      token: state ? state.token : null
+      error: state.error,
+      token: state.login ? state.login.token : ''
     }
 }
 
-export default connect(mapStateToProps)(LoginForm);
+export default withRouter(connect(mapStateToProps)(LoginForm));

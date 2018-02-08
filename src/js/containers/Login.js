@@ -16,9 +16,7 @@ class Login extends Component {
                         <BannerLogin />
                     </div>
                     <div className="login-container">
-                        <div className="login-form">
-                            <LoginForm store={props.store} doLogin={props.doLogin} />
-                        </div>
+                        <LoginForm doLogin={props.doLogin} />
                     </div>             
                 </div>
             </div>
