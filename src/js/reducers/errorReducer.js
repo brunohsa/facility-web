@@ -1,9 +1,8 @@
-import { ERROR } from '../actions/ActionTypes';
+import actionTypes from '../actions/actionTypes';
 
-export function errorReducers(state = null, action) {
-
+export function errorReducers(state = null, action) {    
     switch(action.type) {
-        case ERROR:
+        case actionTypes.SEND_ERROR:
             return action.error;
         default:
             return state;

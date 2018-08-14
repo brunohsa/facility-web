@@ -11,37 +11,40 @@ class Table extends Component {
         }
     }
 
-    componentDidMount() {
-        this.escutarEventos(this.getCollapsibleItem, this.removeCollapsible, this.addCollapsible, this.addFocusOutListener);
-    }
-
-    handlerChange = (value) => {
-        this.setState = {
-            addListener: value
+    componentDidUpdate() {
+        if(this.props.elements) {
+            this.escutarEventos(this.getCollapsibleItem, this.removeCollapsible, this.addCollapsible, this.addFocusOutListener);
         }
-        console.log(value);
     }
+    
     escutarEventos = (getCollapsibleItem, removeCollapsible, addCollapsible, addFocusOutListener) => {        
-        let table = document.querySelectorAll("#table tr");
-        
-        let collapsibleItem;
-        table.forEach(tr => tr.addEventListener('click', function(e) {                    
+        let table = document.querySelectorAll('#collapsible_table tr');
+        table.forEach(tr => tr.addEventListener('mousedown', function (event) {
+            event.preventDefault();
+            
             let element = document.getElementById('collapsible_' + this.id);
-            collapsibleItem = getCollapsibleItem(element);
-
-            if(element.classList.contains('collapsible')) {
-                removeCollapsible(element);
-                collapsibleItem.focus();
-                addFocusOutListener(collapsibleItem, element);                
-            } else {
-                addCollapsible(element);
-                collapsibleItem.removeEventListener('focusout', function(){});
+            if(!element) {
+                return;
+            }
+            let collapsibleItem = getCollapsibleItem(element);
+            if(collapsibleItem) {
+                if(element.classList.contains('collapsible_table_child')) {
+                    removeCollapsible(element);
+                    collapsibleItem.focus();
+                } else {
+                    addCollapsible(element);
+                }
+                addFocusOutListener(collapsibleItem, element);
             }
         }));
     }
 
     getCollapsibleItem = (element) => {
-        return element.firstElementChild.firstElementChild;
+        let tdElement = element.firstElementChild;
+        if(tdElement) {
+            return tdElement.firstElementChild;
+        }
+        return null
     }
     
     addFocusOutListener = (item, element) => {
@@ -51,60 +54,84 @@ class Table extends Component {
         });
     }
 
-    removeFocusOutListener = (item) => {
-        item.removeEventListener('focusout', function(){});
-    }
-    
     removeCollapsible = (element) => {
-        element.classList.remove('collapsible');
+        element.classList.remove('collapsible_table_child');
     }
     
     addCollapsible = (element) => {
-        element.classList.add('collapsible');
+        element.classList.add('collapsible_table_child');
     }
 
     render() {
+        function createStatusComponent(element) {
+            return <tr id={element.id} className="collapsible_table_tr collapsible_table_father collapsible_father_text">
+                        <td> 
+                            <center> 
+                                <div className='status_finance_element'/> 
+                            </center> 
+                        </td>
+                        <td> {element.description} </td>
+                        <td> R$ { element.value } </td>
+                    </tr>
+        }
+
+        function createBodyComponent(element) {
+            return <tr id={'collapsible_' + element.id} className='collapsible_table_child'>
+                        <td colSpan="3"> 
+                            <div className='collapsible_content' tabIndex="1">
+                                <table>
+                                    <tr>
+                                        <td className="collapsible_child_label"> Forma de Pagamento </td>
+                                        <td className="collapsible_child_value"> { element.paymentType } </td>
+                                    </tr>
+                                    <tr>
+                                        <td className="collapsible_child_label"> Data do Lançamento </td>
+                                        <td className="collapsible_child_value"> { element.releaseDate } </td>
+                                    </tr>
+                                    {
+                                        element.expirationDate ? 
+                                            <tr>
+                                                <td className="collapsible_child_label"> Data de Vencimento </td>
+                                                <td className="collapsible_child_value"> { element.expirationDate } </td>
+                                            </tr>
+                                        : <div/>
+                                    }
+                                    {
+                                        element.paymentDate ? 
+                                            <tr>
+                                                <td className="collapsible_child_label"> Data de Pagamento </td>
+                                                <td className="collapsible_child_value"> { element.paymentDate } </td>
+                                            </tr>
+                                        : <div/>
+                                    }
+                                    <tr>
+                                        <td className="collapsible_child_label"> Status </td>
+                                        <td className="collapsible_child_value"> { element.status } </td>
+                                    </tr>
+                                    <tr>
+                                        <td colSpan="2">
+                                            <label className="collapsible_child_label_observation"> Observação:  </label> 
+                                            <div className="colapsible_child_value_observation">
+                                                { element.observation }
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </td>
+                    </tr>
+        }
+
+        let elements = this.props.elements;
         return (
             <div>
-                <table id='table'>
-                    <tbody>
-                        <tr id='123' className="father">
-                            <td> 
-                                <center> <div style={{backgroundColor:'green',height:'20px',width:'20px',borderRadius:'20px'}}/> </center> 
-                            </td>
-                            <td> Descricao </td>
-                            <td> R$ 0,00 </td>
-                        </tr>
-                        <tr id='collapsible_123' className='collapsible'>
-                            <td colSpan="3"> 
-                                <div id='item' tabIndex="1">   Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris ac lorem ante. Vestibulum quis magna pretium, lacinia arcu at, condimentum odio. Ut ultrices tempor metus, sit amet tristique nibh vestibulum in. Pellentesque vel velit eget purus mollis placerat sed sit amet enim. Sed efficitur orci sapien, ac laoreet erat fringilla sodales. </div>
-                            </td>
-                        </tr>
-                        <tr id='456' className="father">
-                            <td> 
-                                <center> <div style={{backgroundColor:'red',height:'20px',width:'20px',borderRadius:'20px'}}/> </center> 
-                            </td>
-                            <td> Descricao </td>
-                            <td> R$ 0,00 </td>
-                        </tr>
-                        <tr id='collapsible_456' className='collapsible'>
-                            <td colSpan="3"> 
-                                <div id='item' tabIndex="1">  TESTE </div>
-                            </td>
-                        </tr>
-                        <tr id='789' className="father">
-                            <td> 
-                                <center> <div style={{backgroundColor:'red',height:'20px',width:'20px',borderRadius:'20px'}}/> </center> 
-                            </td>
-                            <td> Descricao </td>
-                            <td> R$ 0,00 </td>
-                        </tr>
-                        <tr id='collapsible_789' className='collapsible'>
-                            <td colSpan="3"> 
-                                <div id='item' tabIndex="1">  TESTE </div>
-                            </td>
-                        </tr>
-                    </tbody>    
+                <table id='collapsible_table'>
+                    {
+                        elements ? elements.map (
+                            element => [createStatusComponent(element), createBodyComponent(element)]
+                        ) 
+                        : <div/>
+                    }
                 </table> 
             </div>
         )

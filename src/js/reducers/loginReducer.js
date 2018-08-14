@@ -1,10 +1,8 @@
-import { LOGIN } from '../actions/ActionTypes';
+import actionTypes from '../actions/actionTypes';
 
-export function loginReducers(state = null, action) {
-    
+export function loginReducers(state = {}, action) {
     switch(action.type) {
-        case LOGIN:
-            console.log(action.login);
+        case actionTypes.DO_LOGIN:
             return action.login;
         default:
             return state;
