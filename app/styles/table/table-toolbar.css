@@ -1,0 +1,20 @@
+#table-toolbar-container {
+    padding: 0; 
+    margin: 0;
+}
+
+#title-table-toolbar-container {
+    width: 50%;
+}
+
+#filter-table-toolbar-container {
+    width: 50%;
+}
+
+#table-tooltip-position {
+    float: right;
+}
+
+#title-table-style {
+    font-size: 18px;
+}

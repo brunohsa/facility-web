@@ -1,0 +1,22 @@
+#container-table-app {
+    padding-left: 30px;
+    padding-right: 30px;
+}
+
+.btn {
+    background-image: url("../../images/edit.png");
+    background-size:cover;
+    background-size: 30px 30px;
+    background-repeat: no-repeat;
+    height: 40px;
+    min-width: 40px !important;
+    max-width: 40px !important;
+}
+
+.btn:hover {
+    background-color: transparent !important;
+}
+
+.btn:onclick {
+    background-color: transparent !important;
+}
